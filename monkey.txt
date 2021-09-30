@@ -1,8 +1,18 @@
 -- remove collision for shapes
 
-for i,v in pairs(game:GetService("Workspace").Game2.Walls:GetChildren()) do
-     v.CanCollide = false
-end
+
+local runService = game:GetService("RunService")
+local p = false
+runService.RenderStepped:Connect(function()
+if p == false then
+     p = true
+     for i,v in pairs(game:GetService("Workspace").Game2.Walls:GetChildren()) do
+          v:Destroy()
+          end
+          wait(0.5)
+          p = false
+     end
+end)
 
 
 
