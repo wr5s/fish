@@ -32,6 +32,7 @@ end)
 
 -- auto move to enter pad and auto redlight greenlight 
 
+game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.TopSub.SubTitles.Text = "Red Light!"
 local runService = game:GetService("RunService")
 local teleportPad = game:GetService("Workspace")["Game Teleport"]
 local RunAnim = game:GetService("ReplicatedStorage").OtherAnims.Run
