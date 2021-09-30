@@ -1,0 +1,115 @@
+-- remove collision for blood rising
+
+local nutcase = Instance.new("Part", workspace)
+nutcase.Anchored = true
+nutcase.CanCollide = false
+nutcase.Position = Vector3.new(1584.955, 34.652, 824.038)
+nutcase.Size = Vector3.new(99, 484, 110)
+
+local nr = Region3.new(nutcase.Position - (nutcase.Size/2),nutcase.Position + (nutcase.Size/2))
+local fuckers = workspace:FindPartsInRegion3(nr,nil, math.huge)
+
+for i,v in pairs(fuckers) do
+     v.CanCollide = false
+end
+nutcase:Destroy()
+
+
+
+-- add platform for bloodrising
+
+local runService = game:GetService("RunService")
+local np = Instance.new("Part", workspace)
+np.Size = Vector3.new(100,2,100)
+np.Anchored = true
+np.Transparency = 0.5
+
+runService.RenderStepped:Connect(function()
+    np.Position = game:GetService("Workspace").BloodRising.Blood.Position + Vector3.new(0,game:GetService("Workspace").BloodRising.Blood.Size.Y/2,0)
+end)
+
+
+
+-- auto move to enter pad and auto redlight greenlight 
+
+local runService = game:GetService("RunService")
+local teleportPad = game:GetService("Workspace")["Game Teleport"]
+local RunAnim = game:GetService("ReplicatedStorage").OtherAnims.Run
+local IdleAnim = game:GetService("ReplicatedStorage").OtherAnims.Idle
+
+local runplaying = false
+local idleplaying = false
+
+for i,v in pairs(game:GetService("Workspace")["Lobby Room"]:GetChildren()) do
+    if v.Name == "Bed stacks" then
+        v:Destroy()    
+    end
+end
+
+
+
+for i,v in pairs(game:GetService("Workspace").BloodRising:GetDescendants()) do
+    if v.Name == "Part" then
+        v.CanCollide = false  
+    end
+end
+
+function runplay(animator)
+    if runplaying == false then
+        runplaying = true
+        local run = animator:LoadAnimation(RunAnim);
+        run.Priority = Enum.AnimationPriority.Movement;
+        run:Play();
+        repeat wait() until idleplaying == true
+        run:Stop();
+        runplaying = false
+    end
+end
+
+function idleplay(animator)
+    if idleplaying == false then
+        idleplaying = true
+        local idle = animator:LoadAnimation(IdleAnim);
+        idle.Priority = Enum.AnimationPriority.Idle;
+        idle:Play();
+        repeat wait() until runplaying == true
+        idle:Stop();
+        idleplaying = false
+    end
+end
+
+runService.RenderStepped:Connect(function()
+    local Animator = game:GetService('Players').LocalPlayer.Character.Humanoid:WaitForChild("Animator")
+    game:GetService('Players').LocalPlayer.Character.SprintScript.Disabled = true
+
+    local Humanoid = game:GetService('Players').LocalPlayer.Character.Humanoid
+
+    game:GetService('Players').LocalPlayer.Character.Humanoid.WalkSpeed = 25;
+
+    local magnitude1 = (teleportPad.Position - game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+
+    if magnitude1 < 175 then
+        if magnitude1 >25 then
+            Humanoid:MoveTo(teleportPad.Position)
+            runplay(Animator)
+        else idleplay(Animator)
+        end
+
+    else
+        if game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.TopSub.SubTitles.Text == "Red Light!" then
+
+            Humanoid:MoveTo(game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.Position)
+            idleplay(Animator)
+
+        else
+            local magnitude2 = (game:GetService("Workspace").Game1.Girl.skirt3.Position - game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+            if magnitude2 >= 8 then
+                Humanoid:MoveTo(game:GetService("Workspace").Game1.Girl.skirt3.Position)
+                runplay(Animator)
+            else
+                idleplay(Animator)
+            end
+        end
+    end
+end)
+print("This script was lovingly made by wr5s, obfuscated ofcause because its patchable and the fact my code is messy ;p. Enjoy")
