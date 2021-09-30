@@ -112,4 +112,4 @@ runService.RenderStepped:Connect(function()
         end
     end
 end)
-print("This script was lovingly made by wr5s, obfuscated ofcause because its patchable and the fact my code is messy ;p. Enjoy")
+print("This script was lovingly shat out by wr5s, Enjoy ;P")
