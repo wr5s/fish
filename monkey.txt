@@ -1,3 +1,11 @@
+-- remove collision for shapes
+
+for i,v in pairs(game:GetService("Workspace").Game2.Walls:GetChildren()) do
+     v.CanCollide = false
+end
+
+
+
 -- remove collision for blood rising
 
 local nutcase = Instance.new("Part", workspace)
