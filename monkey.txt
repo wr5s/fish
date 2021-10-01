@@ -1,10 +1,19 @@
--- remove collision for shapes
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/edJT9EGX", true))()
+local Main = Library:CreateWindow("Fish Game Settings")
 
+Main:AddToggle({
+        text = "Enabled",
+        flag = "Enabled",
+        state = false,
+    })
+ Library:Init()
+
+-- remove shapes
 
 local runService = game:GetService("RunService")
 local p = false
 runService.RenderStepped:Connect(function()
-if p == false then
+if p == false and Library.flags["Enabled"] == true then
      p = true
      for i,v in pairs(game:GetService("Workspace").Game2.Walls:GetChildren()) do
           v:Destroy()
@@ -13,7 +22,6 @@ if p == false then
           p = false
      end
 end)
-
 
 
 -- remove collision for blood rising
@@ -43,7 +51,11 @@ np.Anchored = true
 np.Transparency = 0.5
 
 runService.RenderStepped:Connect(function()
+    if Library.flags["Enabled"] == true then
     np.Position = game:GetService("Workspace").BloodRising.Blood.Position + Vector3.new(0,game:GetService("Workspace").BloodRising.Blood.Size.Y/2,0)
+    else
+        np.Position = Vector3.new(0,-100,0)
+    end
 end)
 
 
@@ -62,14 +74,6 @@ local idleplaying = false
 for i,v in pairs(game:GetService("Workspace")["Lobby Room"]:GetChildren()) do
     if v.Name == "Bed stacks" then
         v:Destroy()    
-    end
-end
-
-
-
-for i,v in pairs(game:GetService("Workspace").BloodRising:GetDescendants()) do
-    if v.Name == "Part" then
-        v.CanCollide = false  
     end
 end
 
@@ -98,6 +102,7 @@ function idleplay(animator)
 end
 
 runService.RenderStepped:Connect(function()
+    if Library.flags["Enabled"] == true then
     local Animator = game:GetService('Players').LocalPlayer.Character.Humanoid:WaitForChild("Animator")
     game:GetService('Players').LocalPlayer.Character.SprintScript.Disabled = true
 
@@ -130,5 +135,6 @@ runService.RenderStepped:Connect(function()
             end
         end
     end
+end
 end)
-print("This script was lovingly shat out by wr5s, Enjoy ;P")
+print("This script was lovingly shat out by wr5s#0001, Enjoy ;P")
